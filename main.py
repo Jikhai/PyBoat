@@ -1,9 +1,12 @@
 #!/usr/bin/python3
 
 from game import *
+from server_boat import *
 import  random
 import time
-
+import sys
+import socket
+import select
 
 
 """ generate a random valid configuration """
@@ -18,7 +21,7 @@ def randomConfiguration():
             boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
     return boats
 
-    
+
 
 def displayConfiguration(boats, shots=[], showBoats=True):
     Matrix = [[" " for x in range(WIDTH+1)] for y in range(WIDTH+1)]
@@ -68,35 +71,36 @@ def randomNewShot(shots):
     return (x,y)
 
 def main():
-    boats1 = randomConfiguration()
-    boats2 = randomConfiguration()
-    game = Game(boats1, boats2)
-    displayGame(game, 0)
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "localhost":
+            boats1 = randomConfiguration()
+            boats2 = randomConfiguration()
+            game = Game(boats1, boats2)
+            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            client.connect(("localhost",1111))
+            currentPlayer = 0
+            while gameOver(game) == -1:
+                if currentPlayer == J0 :
+                    displayGame(game,currentPlayer )
+                    x_char = input ("quelle colonne ? ")
+                    x_char.capitalize()
+                    x = ord(x_char)-ord("A")+1
+                    y = int(input ("quelle ligne ? "))
+                    addShot(game, x, y, currentPlayer)
+                else:
+                    displayGame(game, currentPlayer)
+                    x_char = input ("quelle colonne ? ")
+                    x_char.capitalize()
+                    x = ord(x_char)-ord("A")+1
+                    y = int(input ("quelle ligne ? "))
+                    addShot(game, x, y, currentPlayer)
+                print("======================")
+                currentPlayer = (currentPlayer+1)%2
 
-    currentPlayer = 0
-    while gameOver(game) == -1:
-        if currentPlayer == J0:
-            x_char = input ("quelle colonne ? ")
-            x_char.capitalize()
-            x = ord(x_char)-ord("A")+1
-            y = int(input ("quelle ligne ? "))
-        else:
-            (x,y) = randomNewShot(game.shots[currentPlayer])
-            print("l'ordinateur joue ", chr(x+ord("A")-1), y)
-            time.sleep(1)
-        addShot(game, x, y, currentPlayer)
-        print("======================")
-        displayGame(game, 0)
-        currentPlayer = (currentPlayer+1)%2
-    print("game over")
-    print("your grid :")
-    displayGame(game, J0)
-    print("the other grid :")
-    displayGame(game, J1)
-
-    if gameOver(game) == J0:
-        print("You win !")
-    else:
-        print("you loose !")
+            if gameOver(game) == 0:
+                client.send(b"You win !")
+            else:
+                client.send(b"you loose !")
 
 main()
