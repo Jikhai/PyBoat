@@ -3,8 +3,17 @@
 from game import *
 import  random
 import time
+import os
+import sys
+import string
+import select
+import socket
+#---- Global Variable Space ----#
 
 
+
+
+#----                       ----#
 
 """ generate a random valid configuration """
 def randomConfiguration():
@@ -68,6 +77,25 @@ def randomNewShot(shots):
     return (x,y)
 
 def main():
+    #what are we going to do today ? 
+    if len(sys.argv) < 2 :
+        print ("Now Running as Server ...")
+        #Run server-side code here
+    else: 
+        if len(sys.argv) > 2 :
+            print ("too many arguments, try -h, or --help")
+            sys.exit(-1)
+            # you dun goofed
+        else :
+            if sys.argv[1] == "-h" or sys.argv[1] == "--help" :
+                print ("usage : ...")
+                # nothing more to do here.
+            else : 
+                print ("now running as Player ...")
+                #Run player-side code here
+
+
+'''def main():
     boats1 = randomConfiguration()
     boats2 = randomConfiguration()
     game = Game(boats1, boats2)
@@ -98,5 +126,6 @@ def main():
         print("You win !")
     else:
         print("you loose !")
-
-main()
+'''
+if __name__ == "__main__" :
+    main()
