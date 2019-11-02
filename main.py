@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from game import *
+from server import *
 import  random
 import time
 import os
@@ -9,10 +10,7 @@ import string
 import select
 import socket
 #---- Global Variable Space ----#
-
-
-
-
+# NB : Global variables from other files also get imported
 #----                       ----#
 
 """ generate a random valid configuration """
@@ -81,6 +79,7 @@ def main():
     if len(sys.argv) < 2 :
         print ("Now Running as Server ...")
         #Run server-side code here
+        SockGestion()
     else: 
         if len(sys.argv) > 2 :
             print ("too many arguments, try -h, or --help")
