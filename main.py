@@ -2,6 +2,7 @@
 
 from game import *
 from server import *
+from client import *
 import  random
 import time
 import os
@@ -87,13 +88,13 @@ def main():
             # you dun goofed
         else :
             if sys.argv[1] == "-h" or sys.argv[1] == "--help" :
-                print ("usage : ...")
+                print ("usage : ...") #to be completed
                 # nothing more to do here.
             else : 
                 print ("now running as Player ...")
                 #Run player-side code here
-
-
+                ClieGestion()
+#kept for reference purposes, will be deleted on release
 '''def main():
     boats1 = randomConfiguration()
     boats2 = randomConfiguration()

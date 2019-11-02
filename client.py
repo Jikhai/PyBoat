@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+from game import *
 
-#TODO
-
+def ClientGestion():
+    #TODO establish connection to the server : requires having a useable address for the server. 
+    print("initializing game, setting up boats")
+    boats = randomConfiguration()
