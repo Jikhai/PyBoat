@@ -23,14 +23,14 @@ if len(sys.argv) == 1:
                 if len(l) == 1:
                     client_1,addr = s.accept()
                     l.append(client_1)
-                    client_1.send(b"Welcome, you're the first player!")
+                    client_1.send(b"Welcome, you're the first player! Waiting for a second player.")
                     print("First PLayer connected...\n")
                 else:
                     if len(l) == 2:
                         client_2,addr = s.accept()
                         l.append(client_2)
-                        client_2.send(b"Welcome, you're the seconde the seconde player!\nAnd the game beggin!")
-                        print("Seconde player connected")
+                        client_2.send(b"Welcome, you're the second player!\nAnd the game will now start!")
+                        print("Second player connected\nThe will start shortly.")
             else:
                 if i == client_1:
                     currentPlayer = 0
