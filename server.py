@@ -52,9 +52,14 @@ def SockGestion(): # controls the opening and closing of sockets.
                 if player1 == '' : # here we're going to check if the two players
                     player1 = established # exist, and refuse further connections
                     player1.send(greeting)
+                    player1.send(("you are player 1\n").encode("UTF_8"))
+                    print("connection to player 1 established !")
+
                 elif player2 == '' :
                     player2 = established
                     player2.send(greeting)
+                    player2.send(("you are player 2\n").encode("UTF_8"))
+                    print("connection to player 2 established !")
                 else :
                     established.send(greeting)
                     established.send(warning)
@@ -62,19 +67,26 @@ def SockGestion(): # controls the opening and closing of sockets.
                     clientlist.remove(established)
                     usrcount-=1 #because it would break the count otherwise
                 usrcount +=1 
-                print("one more user connected, total : ",usrcount) 
+                print("one more user connected, total : ",usrcount,"\n") 
                 # print(clientlist) debug purposes
                
             else : # checking if the sockets are being closed, and what the clients are sending.
                 text=i.recv(1500)
                 if len(text) == 0 :
+                    if i == player1 :
+                        player1 = ''
+                        print(" connection to player 1 lost")
+                    elif i == player2 :
+                        player2 =''
+                        print("connection to player 2 lost")
                     i.close()
                     clientlist.remove(i)
                     usrcount -=1
-                    print("one user left : ", usrcount," left")
+                    print("one user left : ", usrcount," left\n")
                 else :
                     #that's where the magic will happen
-                    print ("data transmitted")
+                    print ("data transmitted from :", i,"\n")
+                    
     else : 
         lesocket.close()
         sys.exit(0)
