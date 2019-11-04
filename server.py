@@ -22,13 +22,18 @@ def SockGestion(): # controls the opening and closing of sockets.
         sys.exit(-1)
 
     lesocket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-
+    port= 7777
     try :
-        lesocket.bind(("",7777))
+        lesocket.bind(("",port))
     except Exception as err:
         print("Failure ! -->", err)
         sys.exit(-1)
-
+    try :
+       hostname=socket.gethostbyname("localhost")
+    except Exception as err:
+        print("Failure ! -->", err)
+        sys.exit(-1)
+    print(hostname," ",port)
     lesocket.listen(1)
     usrcount = 0
     # just a list of preset notifications to send to the clients
