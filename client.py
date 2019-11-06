@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-from game import *
 from main import *
 from server import *
 import os
@@ -20,12 +19,20 @@ def ClieGestion():
     except Exception as err :
         print("Failure --> ",err)
         sys.exit(-1)
-
-    data = lesocket.recv(2048).decode("UTF_8")
-    print(data)
-    #TODO : Contrôl the socket properly -> send, AND recieve data without breaking stuff, current code can establish a connection but this is not enough.
-
-    #displayGame(game, data) #the display is related to the recieved data
-    #this should be handled by the server.
-    #print("initializing game, setting up boats")
-    #boats = randomConfiguration()
+    #TODO à déclarer les variables de mémoire de jeu
+    #reception des placements de bateau et stockage dans un tableau
+    while True :
+        a=0
+    ''' la logique grosso merdo  
+        affichage()
+        data = lesocket.recv(2048).decode("UTF_8")
+            if data = "PLAY" :
+                #jouer un tir
+            elif data = #format de coup joué :
+                #ajouter à la liste des coups joués
+            elif #code victoire ou defaite :
+                changer le tableau du compte de match
+            elif #information spéciale :
+                 #à  voir 
+            else :
+                #erreur ou warning'''

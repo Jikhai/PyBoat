@@ -62,6 +62,8 @@ def SockGestion(): # controls the opening and closing of sockets.
                     player1 = established # exist, and refuse further connections
                     player1.send(greeting)
                     player1.send(("you are player 1\n").encode("UTF_8"))
+                    while True :
+                        player1.send(("woof").encode("UTF_8"))
                     #player1.send(("With ID=0\nEnter your ID : \n").encode("UTF_8"))
                     print("connection to player 1 established !")
                 elif player2 == '' :
@@ -96,6 +98,14 @@ def SockGestion(): # controls the opening and closing of sockets.
                 else :
                     #that's where the magic will happen
                     print ("data transmitted from :", i,"\n")
+                    '''
+                    logique de comm avec le client
+                    -> envoi des position bateau
+                    ->envoi demande input
+                    -> envoi résultat aux deux
+                    -> envoi à l'autre joueur puis retour du résultat aux deux
+                    -> envoi des messages type victoire défaite
+                    '''
 
     else :
         lesocket.close()
