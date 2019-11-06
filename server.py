@@ -44,9 +44,9 @@ def SockGestion(): # controls the opening and closing of sockets.
     warning =("The server is already handling a game between two players\n, closing connection now.\n").encode("utf_8")
 
     #the initialisation of the game
-    #boats1 = randomConfiguration()
-    #boats2 = randomConfiguration()
-    #game = Game(boats1, boats2)
+    boats1 = randomConfiguration()
+    boats2 = randomConfiguration()
+    game = Game(boats1, boats2)
     #these will be the sockets for the two players
     player1 = ''
     player2 = ''
@@ -61,14 +61,14 @@ def SockGestion(): # controls the opening and closing of sockets.
                 if player1 == '' : # here we're going to check if the two players
                     player1 = established # exist, and refuse further connections
                     player1.send(greeting)
-                    player1.send(("you are player 1\n")
-                    #player1.send("With ID=0\nEnter your ID : \n").encode("UTF_8"))
+                    player1.send(("you are player 1\n").encode("UTF_8"))
+                    #player1.send(("With ID=0\nEnter your ID : \n").encode("UTF_8"))
                     print("connection to player 1 established !")
                 elif player2 == '' :
                     player2 = established
                     player2.send(greeting)
-                    player2.send(("you are player 2\n")
-                    #player2.send("With ID=1\nEnter your ID : \n").encode("UTF_8"))
+                    player2.send(("you are player 2\n").encode("UTF_8"))
+                    #player2.send(("With ID=1\nEnter your ID : \n").encode("UTF_8"))
                     print("connection to player 2 established !")
                 else :
                     established.send(greeting)
