@@ -19,11 +19,25 @@ def ClieGestion():
     except Exception as err :
         print("Failure --> ",err)
         sys.exit(-1)
+
+    data = lesocket.recv(2048).decode("UTF_8")
+    print(data)
     #TODO à déclarer les variables de mémoire de jeu
     #reception des placements de bateau et stockage dans un tableau
+    for i in range(5):
+        x = lesocket.recv(1024)
+        #Test print
+        print(x)
+        y = lesocket.recv(1024)
+        #Test print
+        print(y)
+        b.x = x
+        b.y = y
+        boats[i] = b
+
     while True :
         a=0
-    ''' la logique grosso merdo  
+    ''' la logique grosso merdo
         affichage()
         data = lesocket.recv(2048).decode("UTF_8")
             if data = "PLAY" :
@@ -33,6 +47,6 @@ def ClieGestion():
             elif #code victoire ou defaite :
                 changer le tableau du compte de match
             elif #information spéciale :
-                 #à  voir 
+                 #à  voir
             else :
                 #erreur ou warning'''
