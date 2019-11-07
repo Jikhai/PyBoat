@@ -61,11 +61,11 @@ def SockGestion(): # controls the opening and closing of sockets.
                 if player1 == '' : # here we're going to check if the two players
                     player1 = established # exist, and refuse further connections
                     player1.send(greeting)
-                    player1.send(("you are player 1\n").encode("UTF_8"))
+                    player1.send(("you are player 1").encode("UTF_8"))
                     #sending the boats1 position (x,y)
                     for b1 in boats1:
-                        player1.send(b"%d "%b1.x)
-                        player1.send(b"%d\n"%b1.y)
+                        player1.send(b"%d"%b1.x)
+                        player1.send(b"%d"%b1.y)
                     #while True :
                     #    player1.send(("woof").encode("UTF_8"))
                     #player1.send(("With ID=0\nEnter your ID : \n").encode("UTF_8"))
@@ -73,11 +73,11 @@ def SockGestion(): # controls the opening and closing of sockets.
                 elif player2 == '' :
                     player2 = established
                     player2.send(greeting)
-                    player2.send(("you are player 2\n").encode("UTF_8"))
+                    player2.send(("you are player 2").encode("UTF_8"))
                     #sending the boats2 position (x,y)
                     for b2 in boats2:
-                        player2.send(b"%d "%b2.x)
-                        player2.send(b"%d\n"%b2.y)
+                        player2.send(b"%d"%b2.x)
+                        player2.send(b"%d"%b2.y)
                     #player2.send(("With ID=1\nEnter your ID : \n").encode("UTF_8"))
                     print("connection to player 2 established !")
                 else :

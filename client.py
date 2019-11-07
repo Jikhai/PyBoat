@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from main import *
+from game import *
 from server import *
 import os
 import sys
@@ -20,20 +21,23 @@ def ClieGestion():
         print("Failure --> ",err)
         sys.exit(-1)
 
-    data = lesocket.recv(2048).decode("UTF_8")
+    data = lesocket.recv(1500).decode("UTF_8")
     print(data)
     #TODO à déclarer les variables de mémoire de jeu
     #reception des placements de bateau et stockage dans un tableau
+    b = Boat()
+    boats = []
+    print("\n")
     for i in range(5):
         x = lesocket.recv(1024)
+        b.x = x
         #Test print
         print(x)
         y = lesocket.recv(1024)
+        b.y = y
         #Test print
         print(y)
-        b.x = x
-        b.y = y
-        boats[i] = b
+        boats.append(b)
 
     while True :
         a=0
