@@ -41,6 +41,8 @@ def SockGestion(): # controls the opening and closing of sockets.
     notifforfeit = ("Your opponent left, or was disconnected, you win by default.\n").encode("utf_8")
     #greetingnick =("please pick a username using the command : NICK <username> you can get a list of commands with HELP\n").encode("utf_8")
     greeting =("Welcome to BattleShip !\n").encode("utf_8")
+    p2 =("you are player 2\n").encode("UTF_8")
+    p1 =("you are player 1\n").encode("UTF_8")
     warning =("The server is already handling a game between two players\n, closing connection now.\n").encode("utf_8")
 
     #the initialisation of the game
@@ -61,10 +63,10 @@ def SockGestion(): # controls the opening and closing of sockets.
                 if player1 == '' : # here we're going to check if the two players
                     player1 = established # exist, and refuse further connections
                     player1.send(greeting)
-                    player1.send(("you are player 1\n").encode("UTF_8"))
+                    player1.send(p1)
                     #sending the boats1 position (x,y)
                     player1.send(bytes(str(boats1),'UTF_8'))
-                    #print(boatlist)    
+                    #print(boatlist)
                     #while True :
                     #    player1.send(("woof").encode("UTF_8"))
                     #player1.send(("With ID=0\nEnter your ID : \n").encode("UTF_8"))
@@ -72,11 +74,9 @@ def SockGestion(): # controls the opening and closing of sockets.
                 elif player2 == '' :
                     player2 = established
                     player2.send(greeting)
-                    player2.send(("you are player 2\n").encode("UTF_8"))
+                    player2.send(p2)
                     #sending the boats2 position (x,y)
-                    for b2 in boats2:
-                        player2.send(b"%d"%b2.x)
-                        player2.send(b"%d"%b2.y)
+                    player2.send(bytes(str(boats2),'UTF_8'))
                     #player2.send(("With ID=1\nEnter your ID : \n").encode("UTF_8"))
                     print("connection to player 2 established !")
                 else :
