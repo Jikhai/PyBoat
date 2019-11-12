@@ -63,9 +63,8 @@ def SockGestion(): # controls the opening and closing of sockets.
                     player1.send(greeting)
                     player1.send(("you are player 1\n").encode("UTF_8"))
                     #sending the boats1 position (x,y)
-                    for b1 in boats1:
-                        player1.send(b"%d"%b1.x)
-                        player1.send(b"%d"%b1.y)
+                    player1.send(bytes(str(boats1),'UTF_8'))
+                    #print(boatlist)    
                     #while True :
                     #    player1.send(("woof").encode("UTF_8"))
                     #player1.send(("With ID=0\nEnter your ID : \n").encode("UTF_8"))
