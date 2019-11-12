@@ -62,6 +62,10 @@ def SockGestion(): # controls the opening and closing of sockets.
                     player1 = established # exist, and refuse further connections
                     player1.send(greeting)
                     player1.send(("you are player 1\n").encode("UTF_8"))
+                    #sending the boats1 position (x,y)
+                    for b1 in boats1:
+                        player1.send(b"%d"%b1.x)
+                        player1.send(b"%d"%b1.y)
                     #while True :
                     #    player1.send(("woof").encode("UTF_8"))
                     #player1.send(("With ID=0\nEnter your ID : \n").encode("UTF_8"))
@@ -70,6 +74,10 @@ def SockGestion(): # controls the opening and closing of sockets.
                     player2 = established
                     player2.send(greeting)
                     player2.send(("you are player 2\n").encode("UTF_8"))
+                    #sending the boats2 position (x,y)
+                    for b2 in boats2:
+                        player2.send(b"%d"%b2.x)
+                        player2.send(b"%d"%b2.y)
                     #player2.send(("With ID=1\nEnter your ID : \n").encode("UTF_8"))
                     print("connection to player 2 established !")
                 else :
@@ -81,17 +89,20 @@ def SockGestion(): # controls the opening and closing of sockets.
                 usrcount +=1
                 print("one more user connected, total : ",usrcount,"\n")
                 # print(clientlist) debug purposes
-                #sending the boats1 position (x,y)
-                for b1 in boats1:
-                    player1.send(b"%d"%b1.x)
-                    player1.send(b"%d"%b1.y)
-                #sending the boats2 position (x,y)
-                for b2 in boats2:
-                    player2.send(b"%d"%b2.x)
-                    player2.send(b"%d"%b2.y)
 
             else : # checking if the sockets are being closed, and what the clients are sending.
-                text=i.recv(1500)
+                #if i == player1 :
+                #    #sending the boats1 position (x,y)
+                #    for b1 in boats1:
+                #        i.send(b"%d"%b1.x)
+                #        i.send(b"%d"%b1.y)
+                #elif i ==  player2:
+                #    #sending the boats2 position (x,y)
+                #    for b2 in boats2:
+                #        i.send(b"%d"%b2.x)
+                #        i.send(b"%d"%b2.y)
+
+                text=i.recv(1500).decode("UTF_8")
                 if len(text) == 0 :
                     if i == player1 :
                         player1 = ''
@@ -106,6 +117,8 @@ def SockGestion(): # controls the opening and closing of sockets.
                 else :
                     #that's where the magic will happen
                     print ("data transmitted from :", i,"\n")
+                    print(text)
+
                     '''
                     logique de comm avec le client
                     -> envoi des position bateau
