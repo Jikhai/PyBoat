@@ -7,9 +7,8 @@ import os
 import sys
 import string
 import socket
-def ClieGestion():
-    
-    #TODO establish connection to the server : requires having a useable address for the server.
+def ClieGestion(): #all of the logic for the client side
+    boats = ''
     try :
         lesocket = socket.socket(socket.AF_INET6,socket.SOCK_STREAM, 0)
     except Exception as err:
@@ -29,9 +28,10 @@ def ClieGestion():
             lesocket.close()
         else :
             try : 
-                data.decode("UTF_8")
+                data = data.decode("UTF_8") 
             except Exception as err :
-                print("not a regular message :p")
+                #print("not a regular message :p") #debug
+                data = pickle.loads(data)
             print(data)
             print("--------------------------------------------------------\n")
 
