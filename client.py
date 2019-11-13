@@ -1,13 +1,14 @@
 #!/usr/bin/python3
+from game import *
 from main import *
-#from game import *
 from server import *
+import pickle
 import os
 import sys
 import string
 import socket
 def ClieGestion():
-
+    
     #TODO establish connection to the server : requires having a useable address for the server.
     try :
         lesocket = socket.socket(socket.AF_INET6,socket.SOCK_STREAM, 0)
@@ -21,7 +22,7 @@ def ClieGestion():
         print("Failure --> ",err)
         sys.exit(-1)
 
-    data = lesocket.recv(1500).decode("UTF_8")
+    data = lesocket.recv(40).decode("UTF_8")
     print(data)
     print("je suis ici 1.0")
 
@@ -31,24 +32,19 @@ def ClieGestion():
     boats = []
     print("--------------------------------------------------------\n")
     StrMatrix = lesocket.recv(1500).decode("UTF_8")
-    print(StrMatrix)
-    print("je suis plus bas 1.2")
 
-    #String to list -->
-    ListMatrix = StrMatrix.split(', ')
+    #test prints
+    print(StrMatrix)
+    print("\nje suis plus bas 1.2")
+
+    Matrix = pickle.dumps(StrMatrix)
+    ListMatrix = pickle.loads(Matrix)
+
+    #test print
     print(ListMatrix)
 
-    '''for i in range(10):
-        x = lesocket.recv(1024)
-        print(x)
-        lesocket.send(x)
-        boats[i] = x
-        #Test print
-        y = lesocket.recv(1024)
-        boats[i + 1] = y
-        #Test print
-        i = i + 1
-    lesocket.send(("test3").encode("UTF_8"))'''
+    shots = []
+    displayConfiguration(ListMatrix, shots, showBoats=True )
 
     '''for i in range(10):
         if i % 2 == 0:
@@ -56,7 +52,7 @@ def ClieGestion():
         else:
             print("y = "+ boats[i])
         print("\n")
-    lesocket.send(("test4").encode("UTF_8"))'''
+    lesocket.send(("test4").encode("UTF_8"))
     #for i in range(5):
     #    x = lesocket.recv(1024)
     #    b.x = x
@@ -66,7 +62,7 @@ def ClieGestion():
     #    b.y = y
     #    #Test print
     #    print(y)
-    #    boats[i] = b
+    #    boats[i] = b'''
 
     while True :
         a=0
