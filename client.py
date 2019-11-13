@@ -21,51 +21,26 @@ def ClieGestion():
     except Exception as err :
         print("Failure --> ",err)
         sys.exit(-1)
-
-    data = lesocket.recv(40).decode("UTF_8")
-    print(data)
-    print("je suis ici 1.0")
+    
+    while True :
+        data = lesocket.recv(4096)
+        if len(data) ==0 :
+            print("connection to server lost !")
+            lesocket.close()
+        else :
+            try : 
+                data.decode("UTF_8")
+            except Exception as err :
+                print("not a regular message :p")
+            print(data)
+            print("--------------------------------------------------------\n")
 
     #TODO à déclarer les variables de mémoire de jeu
     #reception des placements de bateau et stockage dans un tableau
     #b = Boat()
-    boats = []
-    print("--------------------------------------------------------\n")
-    StrMatrix = lesocket.recv(1500).decode("UTF_8")
+    #boats = []
+   
 
-    #test prints
-    print(StrMatrix)
-    print("\nje suis plus bas 1.2")
-
-    Matrix = pickle.dumps(StrMatrix)
-    ListMatrix = pickle.loads(Matrix)
-
-    #test print
-    print(ListMatrix)
-
-    shots = []
-    displayConfiguration(ListMatrix, shots, showBoats=True )
-
-    '''for i in range(10):
-        if i % 2 == 0:
-            print("x = "+ boats[i])
-        else:
-            print("y = "+ boats[i])
-        print("\n")
-    lesocket.send(("test4").encode("UTF_8"))
-    #for i in range(5):
-    #    x = lesocket.recv(1024)
-    #    b.x = x
-    #    #Test print
-    #    print(x)
-    #    y = lesocket.recv(1024)
-    #    b.y = y
-    #    #Test print
-    #    print(y)
-    #    boats[i] = b'''
-
-    while True :
-        a=0
     ''' la logique grosso merdo
         affichage()
         data = lesocket.recv(2048).decode("UTF_8")

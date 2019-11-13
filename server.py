@@ -7,6 +7,8 @@ import sys
 import string
 import select
 import socket
+import pickle
+
 #---- Global Variable Space ----#
 
 #Client socket list
@@ -15,7 +17,7 @@ clientlist = []
 #----                       ----#
 
 
-def SockGestion(): # controls the opening and closing of sockets.
+def SockGestion(): # controls the opening and closing of sockets and game logic
     try :
         lesocket = socket.socket(socket.AF_INET6,socket.SOCK_STREAM, 0)
     except Exception as err:
@@ -29,14 +31,17 @@ def SockGestion(): # controls the opening and closing of sockets.
     except Exception as err:
         print("Failure ! -->", err)
         sys.exit(-1)
-    try :
+    
+    '''try :
        hostname=socket.gethostbyname("localhost")
     except Exception as err:
         print("Failure ! -->", err)
         sys.exit(-1)
-    print(hostname," ",port)
+    print(hostname," ",port)'''
+    
     lesocket.listen(1)
     usrcount = 0
+
     # just a list of preset notifications to send to the clients
     notifforfeit = ("Your opponent left, or was disconnected, you win by default.\n").encode("utf_8")
     #greetingnick =("please pick a username using the command : NICK <username> you can get a list of commands with HELP\n").encode("utf_8")
@@ -52,7 +57,7 @@ def SockGestion(): # controls the opening and closing of sockets.
     #these will be the sockets for the two players
     player1 = ''
     player2 = ''
-
+    isgameinit = 0
     while True : #tests avec nc localhost 7777 > will do a local client later on
 
         socklist,list_a,list_b = select.select(clientlist + [lesocket],[],[])
@@ -64,20 +69,14 @@ def SockGestion(): # controls the opening and closing of sockets.
                     player1 = established # exist, and refuse further connections
                     player1.send(greeting)
                     player1.send(p1)
-                    #sending the boats1 position (x,y)
-                    player1.send(bytes(str(boats1),'UTF_8'))
-                    #print(boatlist)
-                    #while True :
-                    #    player1.send(("woof").encode("UTF_8"))
-                    #player1.send(("With ID=0\nEnter your ID : \n").encode("UTF_8"))
                     print("connection to player 1 established !")
+                    if isgameinit < 2 : #only two when the two players have recieved the boat position data.
+                        player1.send(pickle.dumps(boats1))
+                        isgameinit +=1
                 elif player2 == '' :
                     player2 = established
                     player2.send(greeting)
                     player2.send(p2)
-                    #sending the boats2 position (x,y)
-                    player2.send(bytes(str(boats2),'UTF_8'))
-                    #player2.send(("With ID=1\nEnter your ID : \n").encode("UTF_8"))
                     print("connection to player 2 established !")
                 else :
                     established.send(greeting)
@@ -90,18 +89,7 @@ def SockGestion(): # controls the opening and closing of sockets.
                 # print(clientlist) debug purposes
 
             else : # checking if the sockets are being closed, and what the clients are sending.
-                #if i == player1 :
-                #    #sending the boats1 position (x,y)
-                #    for b1 in boats1:
-                #        i.send(b"%d"%b1.x)
-                #        i.send(b"%d"%b1.y)
-                #elif i ==  player2:
-                #    #sending the boats2 position (x,y)
-                #    for b2 in boats2:
-                #        i.send(b"%d"%b2.x)
-                #        i.send(b"%d"%b2.y)
-
-                text=i.recv(1500).decode("UTF_8")
+                text=i.recv(4096).decode("UTF_8")
                 if len(text) == 0 :
                     if i == player1 :
                         player1 = ''
@@ -115,9 +103,9 @@ def SockGestion(): # controls the opening and closing of sockets.
                     print("one user left : ", usrcount," left\n")
                 else :
                     #that's where the magic will happen
-                    print ("data transmitted from :", i,"\n")
-                    print(text)
-
+                    #print ("data transmitted from :", i,"\n")
+                    #print(text)
+                    
                     '''
                     logique de comm avec le client
                     -> envoi des position bateau
