@@ -67,16 +67,14 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                 clientlist.append(established)
                 if player1 == '' : # here we're going to check if the two players
                     player1 = established # exist, and refuse further connections
-                    player1.send(greeting)
-                    player1.send(p1)
+                    player1.send(greeting + p1)
                     print("connection to player 1 established !")
                     if isgameinit < 2 : #only two when the two players have recieved the boat position data.
                         player1.send(pickle.dumps(boats1))
                         isgameinit +=1
                 elif player2 == '' :
                     player2 = established
-                    player2.send(greeting)
-                    player2.send(p2)
+                    player2.send(greeting + p2)
                     print("connection to player 2 established !")
                     if isgameinit < 2 : #only two when the two players have recieved the boat position data.
                         player2.send(pickle.dumps(boats2))
@@ -108,7 +106,8 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                     #that's where the magic will happen
                     #print ("data transmitted from :", i,"\n")
                     #print(text)
-                    
+                    if i == player1 :
+                        player1.send(("PLAY").encode("UTF_8"))
                     '''
                     logique de comm avec le client
                     -> envoi des position bateau

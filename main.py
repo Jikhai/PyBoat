@@ -78,7 +78,7 @@ def randomNewShot(shots):
 def main():
     #what are we going to do today ? 
     if len(sys.argv) < 2 :
-        print ("Now Running as Server ...")
+        print ("Now Running as Server ...\n\n")
         #Run server-side code here
         SockGestion()
     else: 
@@ -88,12 +88,13 @@ def main():
             # you dun goofed
         else :
             if sys.argv[1] == "-h" or sys.argv[1] == "--help" :
-                print ("usage : ...") #to be completed
+                print ("usage : ...\n") #to be completed
                 # nothing more to do here.
             else : 
-                print ("now running as Player ...")
+                print ("now running as Player ...\n\n")
                 #Run player-side code here
                 ClieGestion()
+
 #kept for reference purposes, will be deleted on release
 '''def main():
     boats1 = randomConfiguration()

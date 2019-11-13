@@ -8,7 +8,13 @@ import sys
 import string
 import socket
 def ClieGestion(): #all of the logic for the client side
-    boats = ''
+    
+    #---- GAME VARIABLES ----#
+    boats = '' #position of boats sent at the start of the game
+    text = '' #text sent by the server to display on screen
+    shots = '' #list of shots used to display shots that have been fired
+    #----                ----#    
+    
     try :
         lesocket = socket.socket(socket.AF_INET6,socket.SOCK_STREAM, 0)
     except Exception as err:
@@ -22,23 +28,36 @@ def ClieGestion(): #all of the logic for the client side
         sys.exit(-1)
     
     while True :
-        data = lesocket.recv(4096)
+        try :
+            data = lesocket.recv(4096)
+        except Exception as err:
+            print ("Failure !  -->",err)
+            sys.exit(-1)
         if len(data) ==0 :
-            print("connection to server lost !")
+            print("connection to server lost !\n if you were playing, that's a loss on your side.")
             lesocket.close()
         else :
-            try : 
-                data = data.decode("UTF_8") 
+            try : # if it can't be decoded then it's the data for boat positions    
+                text  = data.decode("UTF_8") #play
             except Exception as err :
                 #print("not a regular message :p") #debug
-                data = pickle.loads(data)
-            print(data)
-            print("--------------------------------------------------------\n")
+                if boats== '':
+                    boats = pickle.loads(data) # rebuilding the boat data from bytes
+                else :
+                    print("weird, you recieved unreadable data, we'll just ignore it for now\n")    
+            if boats != '' : # if boat data has been set up
+                print(boats) #to be replaced with a display method     
+            if text == "PLAY" : 
+                print("TAKE AIM !")
+            elif text == "VICTORY" : 
+                print("you win ! ending the game now.\n")
+            elif text == "DEFEAT" : 
+                print("you loose ! ending the game now.\n")
+            elif text !='' :
+                print(text)
+                text=''
+            print("\n----------------------\n")
 
-    #TODO à déclarer les variables de mémoire de jeu
-    #reception des placements de bateau et stockage dans un tableau
-    #b = Boat()
-    #boats = []
    
 
     ''' la logique grosso merdo
