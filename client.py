@@ -49,8 +49,7 @@ def ClieGestion(): #all of the logic for the client side
                 else :    
                     print("weird, you recieved unreadable data, we'll just ignore it for now\n")    
             if boats != '' and hostiles != '' : # if boat data has been set up
-                print(boats) #to be replaced with a display method     
-                print(hostiles)
+                Display(boats,hostiles,shots,shots)
             if text == "PLAY" : 
                 print("TAKE AIM !")
             elif text == "VICTORY" : 
