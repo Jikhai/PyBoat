@@ -13,7 +13,8 @@ def ClieGestion(): #all of the logic for the client side
     boats = '' #position of boats sent at the start of the game
     hostiles = '' #position of ennemy boats
     text = '' #text sent by the server to display on screen
-    shots = '' #list of shots used to display shots that have been fired
+    shots1 = [] #list of shots used to display shots that have been fired
+    shots2 = [] #list of shots used to display shots that have been fired
     #----                ----#
 
     try :
@@ -50,17 +51,19 @@ def ClieGestion(): #all of the logic for the client side
                 else :
                     print("weird, you recieved unreadable data, we'll just ignore it for now\n")
             if boats != '' and hostiles != '' : # if boat data has been set up
-                Display(boats,hostiles,shots,shots)
+                Display(boats,hostiles,shots1,shots2)
             if text.startswith("PLAY") :
-                print("TAKE AIM !")
-                coord = fire()
-                coord = str(coord)
-                lesocket.send(coord.encode())
-                ###########################
-                #coord2 = lesocket.recv(4096)).decode("UTF_8")
-                #print(coord2)
-                #lesocket.recv() --> modification de shots
-                ##########################
+                while text != "VICTORY":
+                    print("TAKE AIM !")
+                    x,y = fire()
+                    coord = (x,y)
+                    shots2.append((x, y, isAStrike(hostiles, x, y)))# --> shots to the other player
+                    #we need to append the coords ans the isAStrike function \
+                    #compatibiilty  with shots in displayConfiguration
+                    coord = str(coord)
+                    lesocket.send(coord.encode())
+                    Display(boats,hostiles,shots1,shots2)
+
             elif text == "VICTORY" :
                 print("you win ! ending the game now.\n")
             elif text == "DEFEAT" :
@@ -83,7 +86,7 @@ def fire():
     x_char.capitalize()
     x = ord(x_char)-ord("A")+1
     y = int(input ("quelle ligne ? "))
-    return (x,y)
+    return x,y
 
     ''' la logique grosso merdo
         affichage()
