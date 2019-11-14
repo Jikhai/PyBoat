@@ -31,14 +31,14 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
     except Exception as err:
         print("Failure ! -->", err)
         sys.exit(-1)
-    
+
     '''try :
        hostname=socket.gethostbyname("localhost")
     except Exception as err:
         print("Failure ! -->", err)
         sys.exit(-1)
     print(hostname," ",port)'''
-    
+
     lesocket.listen(1)
     usrcount = 0
 
@@ -110,6 +110,10 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                     #print(text)
                     if i == player1 :
                         player1.send(("PLAY").encode("UTF_8"))
+                        #i.recv() (positions x et y)
+                        #game.addShot(game, x, y, 0)#0 -> player 1 (test avec fonction de game)
+                        #player2.send() position x y pour shots
+                        #meme chose pour player 2 sauf que 0 -> 1 et send to player1
                     '''
                     logique de comm avec le client
                     -> envoi des position bateau

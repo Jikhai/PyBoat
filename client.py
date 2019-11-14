@@ -8,14 +8,14 @@ import sys
 import string
 import socket
 def ClieGestion(): #all of the logic for the client side
-    
+
     #---- GAME VARIABLES ----#
     boats = '' #position of boats sent at the start of the game
     hostiles = '' #position of ennemy boats
     text = '' #text sent by the server to display on screen
     shots = '' #list of shots used to display shots that have been fired
-    #----                ----#    
-    
+    #----                ----#
+
     try :
         lesocket = socket.socket(socket.AF_INET6,socket.SOCK_STREAM, 0)
     except Exception as err:
@@ -38,7 +38,7 @@ def ClieGestion(): #all of the logic for the client side
             print("connection to server lost !\n if you were playing, that's a loss on your side.")
             lesocket.close()
         else :
-            try : # if it can't be decoded then it's the data for boat positions    
+            try : # if it can't be decoded then it's the data for boat positions
                 text  = data.decode("UTF_8") #play
             except Exception as err :
                 #print("not a regular message :p") #debug
@@ -46,22 +46,26 @@ def ClieGestion(): #all of the logic for the client side
                     boats = pickle.loads(data) # rebuilding the boat data from bytes
                 elif hostiles == '' :
                     hostiles = pickle.loads(data) #same for ennemies
-                else :    
-                    print("weird, you recieved unreadable data, we'll just ignore it for now\n")    
+                else :
+                    print("weird, you recieved unreadable data, we'll just ignore it for now\n")
             if boats != '' and hostiles != '' : # if boat data has been set up
                 Display(boats,hostiles,shots,shots)
-            if text == "PLAY" : 
+            if text == "PLAY" :
                 print("TAKE AIM !")
-            elif text == "VICTORY" : 
+                x,y = input()
+                lesocket.send(x)
+                lesocket.send(y)
+                #lesocket.recv() --> modification de shots
+            elif text == "VICTORY" :
                 print("you win ! ending the game now.\n")
-            elif text == "DEFEAT" : 
+            elif text == "DEFEAT" :
                 print("you loose ! ending the game now.\n")
             elif text !='' :
                 print(text)
                 text=''
             print("\n----------------------\n")
 
-   
+
 
 
 
@@ -69,7 +73,12 @@ def Display(boats1, boats2, shots1, shots2):
     main.displayConfiguration(boats1, shots1, True)
     main.displayConfiguration(boats2, shots2, False)
 
-
+def input():
+    x_char = input ("quelle colonne ? ")
+    x_char.capitalize()
+    x = ord(x_char)-ord("A")+1
+    y = int(input ("quelle ligne ? "))
+    return x,y
 
     ''' la logique grosso merdo
         affichage()
