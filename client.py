@@ -56,7 +56,11 @@ def ClieGestion(): #all of the logic for the client side
                 coord = fire()
                 coord = str(coord)
                 lesocket.send(coord.encode())
+                ###########################
+                #coord2 = lesocket.recv(4096)).decode("UTF_8")
+                #print(coord2)
                 #lesocket.recv() --> modification de shots
+                ##########################
             elif text == "VICTORY" :
                 print("you win ! ending the game now.\n")
             elif text == "DEFEAT" :

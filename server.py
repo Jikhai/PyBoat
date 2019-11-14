@@ -90,13 +90,29 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                 usrcount +=1
                 print("one more user connected, total : ",usrcount,"\n")
                 # print(clientlist) debug purposes
-        
+
         if isgameinit == 2 :
             player1.send(("PLAY").encode("UTF_8"))
             text = (player1.recv(4096).decode("UTF_8"))
             print(text)
-    
-            
+            #####################"
+            #send = pickle.dumps(text)
+            #result = pickle.loads(send)
+            #x = int(result[1])
+            #y = int(result[4])
+            #addShot(game, x, y, 0)
+            #player2.send((bytes(text)).encode("UTF_8"))
+            #player2.send(("PLAY").encode("UTF_8"))
+            #text2 = (player2.recv(4096).decode("UTF_8"))
+            #print(text2)
+            #send = pickle.dumps(text2)
+            #result = pickle.loads(send)
+            #w = result[1]
+            #z = result[4]
+            #addShot(game, w, z, 1)
+            #player1.send((bytes(text2)).encode("UTF_8"))
+            #####################
+
             ''' text=i.recv(4096).decode("UTF_8")
                 if len(text) == 0 :
                     if i == player1 :
@@ -119,7 +135,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                         #game.addShot(game, x, y, 0)#0 -> player 1 (test avec fonction de game)
                         #player2.send() position x y pour shots
                         #meme chose pour player 2 sauf que 0 -> 1 et send to player1
-            
+
                     logique de comm avec le client
                     -> envoi des position bateau
                     ->envoi demande input
