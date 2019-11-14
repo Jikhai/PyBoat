@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-from game import *
-from main import *
+import game
+import main
 import time
 import os
 import sys
@@ -51,9 +51,9 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
     warning =("The server is already handling a game between two players\n, closing connection now.\n").encode("utf_8")
 
     #the initialisation of the game
-    boats1 = randomConfiguration()
-    boats2 = randomConfiguration()
-    game = Game(boats1, boats2)
+    boats1 = main.randomConfiguration()
+    boats2 = main.randomConfiguration()
+    game = main.Game(boats1, boats2)
     #these will be the sockets for the two players
     player1 = ''
     player2 = ''
@@ -94,24 +94,17 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
         if isgameinit == 2 :
             player1.send(("PLAY").encode("UTF_8"))
             text = (player1.recv(4096).decode("UTF_8"))
-            print(text)
-            #####################"
-            #send = pickle.dumps(text)
-            #result = pickle.loads(send)
-            #x = int(result[1])
-            #y = int(result[4])
-            #addShot(game, x, y, 0)
-            #player2.send((bytes(text)).encode("UTF_8"))
-            #player2.send(("PLAY").encode("UTF_8"))
-            #text2 = (player2.recv(4096).decode("UTF_8"))
-            #print(text2)
-            #send = pickle.dumps(text2)
-            #result = pickle.loads(send)
-            #w = result[1]
-            #z = result[4]
-            #addShot(game, w, z, 1)
-            #player1.send((bytes(text2)).encode("UTF_8"))
-            #####################
+            #print(text) #debug
+            x =  int(text[1])
+            y =  int(text[4])
+            main.addShot(game, x, y, 0)
+            player2.send(("PLAY").encode("UTF_8"))
+            text = (player2.recv(4096).decode("UTF_8"))
+            #print(text) #debug
+            x = int(text[1])
+            y = int(text[4])
+            main.addShot(game, x, y, 1)
+            ##################### still needs to send shoot data to players.
 
             ''' text=i.recv(4096).decode("UTF_8")
                 if len(text) == 0 :
