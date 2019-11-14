@@ -42,6 +42,7 @@ def ClieGestion(): #all of the logic for the client side
                 text  = data.decode("UTF_8") #play
             except Exception as err :
                 #print("not a regular message :p") #debug
+                text = ''
                 if boats== '':
                     boats = pickle.loads(data) # rebuilding the boat data from bytes
                 elif hostiles == '' :
@@ -50,11 +51,11 @@ def ClieGestion(): #all of the logic for the client side
                     print("weird, you recieved unreadable data, we'll just ignore it for now\n")
             if boats != '' and hostiles != '' : # if boat data has been set up
                 Display(boats,hostiles,shots,shots)
-            if text == "PLAY" :
+            if text.startswith("PLAY") :
                 print("TAKE AIM !")
-                x,y = input()
-                lesocket.send(x)
-                lesocket.send(y)
+                coord = fire()
+                coord = str(coord)
+                lesocket.send(coord.encode())
                 #lesocket.recv() --> modification de shots
             elif text == "VICTORY" :
                 print("you win ! ending the game now.\n")
@@ -73,12 +74,12 @@ def Display(boats1, boats2, shots1, shots2):
     main.displayConfiguration(boats1, shots1, True)
     main.displayConfiguration(boats2, shots2, False)
 
-def input():
+def fire():
     x_char = input ("quelle colonne ? ")
     x_char.capitalize()
     x = ord(x_char)-ord("A")+1
     y = int(input ("quelle ligne ? "))
-    return x,y
+    return (x,y)
 
     ''' la logique grosso merdo
         affichage()
