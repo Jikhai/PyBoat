@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from game import *
-from main import *
+import main
 from server import *
 import pickle
 import os
@@ -27,7 +27,7 @@ def ClieGestion(): #all of the logic for the client side
     except Exception as err :
         print("Failure --> ",err)
         sys.exit(-1)
-    
+
     while True :
         try :
             data = lesocket.recv(4096)
@@ -63,6 +63,14 @@ def ClieGestion(): #all of the logic for the client side
             print("\n----------------------\n")
 
    
+
+
+
+def Display(boats1, boats2, shots1, shots2):
+    main.displayConfiguration(boats1, shots1, True)
+    main.displayConfiguration(boats2, shots2, False)
+
+
 
     ''' la logique grosso merdo
         affichage()
