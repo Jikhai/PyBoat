@@ -11,6 +11,7 @@ def ClieGestion(): #all of the logic for the client side
     
     #---- GAME VARIABLES ----#
     boats = '' #position of boats sent at the start of the game
+    hostiles = '' #position of ennemy boats
     text = '' #text sent by the server to display on screen
     shots = '' #list of shots used to display shots that have been fired
     #----                ----#    
@@ -43,10 +44,13 @@ def ClieGestion(): #all of the logic for the client side
                 #print("not a regular message :p") #debug
                 if boats== '':
                     boats = pickle.loads(data) # rebuilding the boat data from bytes
-                else :
+                elif hostiles == '' :
+                    hostiles = pickle.loads(data) #same for ennemies
+                else :    
                     print("weird, you recieved unreadable data, we'll just ignore it for now\n")    
-            if boats != '' : # if boat data has been set up
+            if boats != '' and hostiles != '' : # if boat data has been set up
                 print(boats) #to be replaced with a display method     
+                print(hostiles)
             if text == "PLAY" : 
                 print("TAKE AIM !")
             elif text == "VICTORY" : 

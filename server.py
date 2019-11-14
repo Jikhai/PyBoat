@@ -71,6 +71,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                     print("connection to player 1 established !")
                     if isgameinit < 2 : #only two when the two players have recieved the boat position data.
                         player1.send(pickle.dumps(boats1))
+                        player1.send(pickle.dumps(boats2))
                         isgameinit +=1
                 elif player2 == '' :
                     player2 = established
@@ -78,6 +79,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                     print("connection to player 2 established !")
                     if isgameinit < 2 : #only two when the two players have recieved the boat position data.
                         player2.send(pickle.dumps(boats2))
+                        player2.send(pickle.dumps(boats1))
                         isgameinit +=1
                 else :
                     established.send(greeting)
