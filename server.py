@@ -60,7 +60,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
     isgameinit = 0
     while True : #tests avec nc localhost 7777 > will do a local client later on
 
-        socklist,list_a,list_b = select.select(clientlist + [lesocket],[],[])
+        socklist,list_a,list_b = select.select(clientlist + [lesocket],[],[],1)
         for i in socklist :
             if i == lesocket :
                 established, addr = lesocket.accept()
