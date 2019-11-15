@@ -74,10 +74,11 @@ def ClieGestion(): #all of the logic for the client side
                 print("you loose ! ending the game now.\n")
 
             elif text.startswith("(") : #that's a shot dataset
+                print("your opponent played :")
                 x = int(text[1])
                 y = int(text[4])   
                 result = text[7:-1]
-                print(x, y, result) 
+                #print(x, y, result) #debug
                 if result == "True" :
                     shots.append((x, y, True))# --> shots to the other player
                 elif result == "False" :   

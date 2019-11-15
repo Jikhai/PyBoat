@@ -91,9 +91,10 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                     usrcount-=1 #because it would break the count otherwise
                 usrcount +=1
                 print("one more user connected, total : ",usrcount,"\n")
-                # print(clientlist) debug purposes
+                #print(clientlist) #debug purposes
 
         if isgameinit == 2 and main.gameOver(game) == -1 :
+            print("start of a turn !")
             res= ''
             report=''
             player1.send(("PLAY").encode("UTF_8"))
@@ -119,6 +120,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
             report =(x,y,res)
             #print(report)
             player1.send(str(report).encode())
+            time.sleep(1)
 
             ''' text=i.recv(4096).decode("UTF_8")
                 if len(text) == 0 :
