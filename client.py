@@ -30,8 +30,7 @@ def ClieGestion(): #all of the logic for the client side
         print("Failure --> ",err)
         sys.exit(-1)
 
-    while True :
-        #Mettre ici le controle de la fonction win pour que si non win --> passer a la suite sinon passer aux fonctions
+    while win == '' :
         if boats != '' and hostiles != '' : # if boat data has been set up
             Display(boats,hostiles,shots,shots2)
             print("\n----------------------\n")
@@ -70,11 +69,11 @@ def ClieGestion(): #all of the logic for the client side
                     print("DONE!")
             elif text == "VICTORY" :
                 win = "win"
-                print("you win ! ending the game now.\n")
+                won()
 
             elif text == "DEFEAT" :
                 win = "loose"
-                print("you loose ! ending the game now.\n")
+                loose()
 
             elif text.startswith("(") : #that's a shot dataset
                 print("your opponent played :")
@@ -111,7 +110,7 @@ def fire():
         y = int(input ("quelle ligne ? "))
     return x,y
 
-def win ():
+def won ():
     print("you win ! ending the game now.\n")
 
 def loose():
