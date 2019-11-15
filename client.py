@@ -15,6 +15,7 @@ def ClieGestion(): #all of the logic for the client side
     text = '' #text sent by the server to display on screen
     shots = [] #list of shots used to display shots that have been fired
     shots2 =[]
+    win = ''
     #----                ----#
 
     try :
@@ -30,7 +31,7 @@ def ClieGestion(): #all of the logic for the client side
         sys.exit(-1)
 
     while True :
-
+        #Mettre ici le controle de la fonction win pour que si non win --> passer a la suite sinon passer aux fonctions
         if boats != '' and hostiles != '' : # if boat data has been set up
             Display(boats,hostiles,shots,shots2)
             print("\n----------------------\n")
@@ -66,11 +67,13 @@ def ClieGestion(): #all of the logic for the client side
 
                     elif result == "False" :
                         shots2.append((x, y, False))# --> shots to the other player
-
+                    print("DONE!")
             elif text == "VICTORY" :
+                win = "win"
                 print("you win ! ending the game now.\n")
 
             elif text == "DEFEAT" :
+                win = "loose"
                 print("you loose ! ending the game now.\n")
 
             elif text.startswith("(") : #that's a shot dataset
@@ -98,13 +101,18 @@ def Display(boats1, boats2, shots, shots2):
     main.displayConfiguration(boats2, shots2, False)
 
 def fire():
-    x_char = input ("quelle colonne ? ")
-    x_char = x_char.capitalize()
-    while x_char > 'J' or x_char < 'A':
+    x_char = ''
+    y = 0
+    while x_char > 'J' or x_char < 'A' or len(x_char) > 1 :
         x_char = input ("quelle colonne ? ")
         x_char = x_char.capitalize()
     x = ord(x_char)-ord("A")+1
-    y = int(input ("quelle ligne ? "))
-    while y < 1 or y > 10:
+    while y < 1 or y > 10 :
         y = int(input ("quelle ligne ? "))
     return x,y
+
+def win ():
+    print("you win ! ending the game now.\n")
+
+def loose():
+    print("you loose ! ending the game now.\n")
