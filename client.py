@@ -30,10 +30,10 @@ def ClieGestion(): #all of the logic for the client side
         sys.exit(-1)
 
     while True :
-        
+
         if boats != '' and hostiles != '' : # if boat data has been set up
             Display(boats,hostiles,shots,shots2)
-            print("\n----------------------\n") 
+            print("\n----------------------\n")
         try :
             data = lesocket.recv(4096)
         except Exception as err:
@@ -54,7 +54,7 @@ def ClieGestion(): #all of the logic for the client side
                     hostiles = pickle.loads(data) #same for ennemies
                 else :
                     print("weird, you recieved unreadable data, we'll just ignore it for now\n")
-            if text == "PLAY" : 
+            if text == "PLAY" :
                     print("TAKE AIM !")
                     x,y = fire()
                     coord = (x,y)
@@ -63,10 +63,10 @@ def ClieGestion(): #all of the logic for the client side
                     result = (lesocket.recv(1024)).decode("UTF_8")
                     if result == "True" :
                         shots2.append((x, y, True))# --> shots to the other player
-                    
-                    elif result == "False" :   
+
+                    elif result == "False" :
                         shots2.append((x, y, False))# --> shots to the other player
-                
+
             elif text == "VICTORY" :
                 print("you win ! ending the game now.\n")
 
@@ -76,18 +76,18 @@ def ClieGestion(): #all of the logic for the client side
             elif text.startswith("(") : #that's a shot dataset
                 print("your opponent played :")
                 x = int(text[1])
-                y = int(text[4])   
+                y = int(text[4])
                 result = text[7:-1]
                 #print(x, y, result) #debug
                 if result == "True" :
                     shots.append((x, y, True))# --> shots to the other player
-                elif result == "False" :   
+                elif result == "False" :
                     shots.append((x, y, False))# --> shots to the other player
             elif text !='' :
                 print(text)
                 text=''
-            
-            
+
+
 
 
 
@@ -99,7 +99,7 @@ def Display(boats1, boats2, shots, shots2):
 
 def fire():
     x_char = input ("quelle colonne ? ")
-    x_char.capitalize()
+    x_char = x_char.capitalize()
     x = ord(x_char)-ord("A")+1
     y = int(input ("quelle ligne ? "))
     return x,y

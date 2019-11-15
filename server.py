@@ -121,6 +121,14 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
             #print(report)
             player1.send(str(report).encode())
             time.sleep(1)
+        else:
+            if main.gameOver(game) == 0:
+                player1.send(("VICTORY").encode("UTF_8"))
+                player2.send(("DEFEAT").encode("UTF_8"))
+            elif main.gameOver(game) == 1:
+                player2.send(("VICTORY").encode("UTF_8"))
+                player1.send(("DEFEAT").encode("UTF_8"))
+
 
             ''' text=i.recv(4096).decode("UTF_8")
                 if len(text) == 0 :
