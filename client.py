@@ -100,6 +100,11 @@ def Display(boats1, boats2, shots, shots2):
 def fire():
     x_char = input ("quelle colonne ? ")
     x_char = x_char.capitalize()
+    while x_char > 'J' or x_char < 'A':
+        x_char = input ("quelle colonne ? ")
+        x_char = x_char.capitalize()
     x = ord(x_char)-ord("A")+1
     y = int(input ("quelle ligne ? "))
+    while y < 1 or y > 10:
+        y = int(input ("quelle ligne ? "))
     return x,y
