@@ -13,8 +13,8 @@ def ClieGestion(): #all of the logic for the client side
     boats = '' #position of boats sent at the start of the game
     hostiles = '' #position of ennemy boats
     text = '' #text sent by the server to display on screen
-    shots1 = [] #list of shots used to display shots that have been fired
-    shots2 = [] #list of shots used to display shots that have been fired
+    shots = [] #list of shots used to display shots that have been fired
+    ennemyshots =[]
     #----                ----#
 
     try :
@@ -51,35 +51,46 @@ def ClieGestion(): #all of the logic for the client side
                 else :
                     print("weird, you recieved unreadable data, we'll just ignore it for now\n")
             if boats != '' and hostiles != '' : # if boat data has been set up
-                Display(boats,hostiles,shots1,shots2)
-            if text.startswith("PLAY") :
-                while text != "VICTORY":
-                    print("TAKE AIM !")
-                    x,y = fire()
-                    coord = (x,y)
-                    shots2.append((x, y, isAStrike(hostiles, x, y)))# --> shots to the other player
-                    #we need to append the coords ans the isAStrike function \
-                    #compatibiilty  with shots in displayConfiguration
-                    coord = str(coord)
-                    lesocket.send(coord.encode())
-                    Display(boats,hostiles,shots1,shots2)
+                Display(boats,hostiles,shots)
+                if text == "PLAY" : 
+                        print("TAKE AIM !")
+                        x,y = fire()
+                        coord = (x,y)
+                        coord = str(coord)
+                        lesocket.send(coord.encode())
+                        result = (lesocket.recv(1024)).decode("UTF_8")
+                        if result == "True" :
+                            shots.append((x, y, True))# --> shots to the other player
+                        elif result == "False" :   
+                            shots.append((x, y, False))# --> shots to the other player
+                elif text == "VICTORY" :
+                    print("you win ! ending the game now.\n")
 
-            elif text == "VICTORY" :
-                print("you win ! ending the game now.\n")
-            elif text == "DEFEAT" :
-                print("you loose ! ending the game now.\n")
-            elif text !='' :
-                print(text)
-                text=''
-            print("\n----------------------\n")
+                elif text == "DEFEAT" :
+                    print("you loose ! ending the game now.\n")
+
+                elif text.startswith("(") : #that's a shot dataset
+                    x = text[1]
+                    y = text[4]
+                   
+                    result = text[7:-1]
+                    print(x, y, result) 
+                    if result == "True" :
+                        ennemyshots.append((x, y, True))# --> shots to the other player
+                    elif result == "False" :   
+                        ennemyshots.append((x, y, False))# --> shots to the other player
+                elif text !='' :
+                    print(text)
+                    text=''
+                print("\n----------------------\n")
 
 
 
 
 
-def Display(boats1, boats2, shots1, shots2):
-    main.displayConfiguration(boats1, shots1, True)
-    main.displayConfiguration(boats2, shots2, False)
+def Display(boats1, boats2, shots):
+    main.displayConfiguration(boats1, shots, True)
+    main.displayConfiguration(boats2, shots, False)
 
 def fire():
     x_char = input ("quelle colonne ? ")

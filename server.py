@@ -92,18 +92,27 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                 # print(clientlist) debug purposes
 
         if isgameinit == 2 :
+            res= ''
+            report=''
             player1.send(("PLAY").encode("UTF_8"))
             text = (player1.recv(4096).decode("UTF_8"))
             #print(text) #debug
             x =  int(text[1])
             y =  int(text[4])
-            main.addShot(game, x, y, 0)
+            res = main.addShot(game, x, y, 0) #retourne True ou False
+            #envoyer un tuple qui contient True/false et les coordonnéesà P2 et à P1uniquement si c'est un nouveau tir (appelle isanewshot et isastrike)
+            #print(res)
+            player1.send(str(res).encode())
+            report =(x,y,res)
+            #print(report)
+            player2.send(str(report).encode())
             player2.send(("PLAY").encode("UTF_8"))
             text = (player2.recv(4096).decode("UTF_8"))
             #print(text) #debug
             x = int(text[1])
             y = int(text[4])
-            main.addShot(game, x, y, 1)
+            res = main.addShot(game, x, y, 1)
+            player2.send(str(res).encode("UTF_8"))
             ##################### still needs to send shoot data to players.
 
             ''' text=i.recv(4096).decode("UTF_8")
