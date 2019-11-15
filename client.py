@@ -14,7 +14,7 @@ def ClieGestion(): #all of the logic for the client side
     hostiles = '' #position of ennemy boats
     text = '' #text sent by the server to display on screen
     shots = [] #list of shots used to display shots that have been fired
-    ennemyshots =[]
+    shots2 =[]
     #----                ----#
 
     try :
@@ -30,6 +30,10 @@ def ClieGestion(): #all of the logic for the client side
         sys.exit(-1)
 
     while True :
+        
+        if boats != '' and hostiles != '' : # if boat data has been set up
+            Display(boats,hostiles,shots,shots2)
+            print("\n----------------------\n") 
         try :
             data = lesocket.recv(4096)
         except Exception as err:
@@ -50,47 +54,47 @@ def ClieGestion(): #all of the logic for the client side
                     hostiles = pickle.loads(data) #same for ennemies
                 else :
                     print("weird, you recieved unreadable data, we'll just ignore it for now\n")
-            if boats != '' and hostiles != '' : # if boat data has been set up
-                Display(boats,hostiles,shots)
-                if text == "PLAY" : 
-                        print("TAKE AIM !")
-                        x,y = fire()
-                        coord = (x,y)
-                        coord = str(coord)
-                        lesocket.send(coord.encode())
-                        result = (lesocket.recv(1024)).decode("UTF_8")
-                        if result == "True" :
-                            shots.append((x, y, True))# --> shots to the other player
-                        elif result == "False" :   
-                            shots.append((x, y, False))# --> shots to the other player
-                elif text == "VICTORY" :
-                    print("you win ! ending the game now.\n")
-
-                elif text == "DEFEAT" :
-                    print("you loose ! ending the game now.\n")
-
-                elif text.startswith("(") : #that's a shot dataset
-                    x = text[1]
-                    y = text[4]
-                   
-                    result = text[7:-1]
-                    print(x, y, result) 
+            if text == "PLAY" : 
+                    print("TAKE AIM !")
+                    x,y = fire()
+                    coord = (x,y)
+                    coord = str(coord)
+                    lesocket.send(coord.encode())
+                    result = (lesocket.recv(1024)).decode("UTF_8")
                     if result == "True" :
-                        ennemyshots.append((x, y, True))# --> shots to the other player
+                        shots2.append((x, y, True))# --> shots to the other player
+                    
                     elif result == "False" :   
-                        ennemyshots.append((x, y, False))# --> shots to the other player
-                elif text !='' :
-                    print(text)
-                    text=''
-                print("\n----------------------\n")
+                        shots2.append((x, y, False))# --> shots to the other player
+                
+            elif text == "VICTORY" :
+                print("you win ! ending the game now.\n")
+
+            elif text == "DEFEAT" :
+                print("you loose ! ending the game now.\n")
+
+            elif text.startswith("(") : #that's a shot dataset
+                x = int(text[1])
+                y = int(text[4])   
+                result = text[7:-1]
+                print(x, y, result) 
+                if result == "True" :
+                    shots.append((x, y, True))# --> shots to the other player
+                elif result == "False" :   
+                    shots.append((x, y, False))# --> shots to the other player
+            elif text !='' :
+                print(text)
+                text=''
+            
+            
 
 
 
 
 
-def Display(boats1, boats2, shots):
+def Display(boats1, boats2, shots, shots2):
     main.displayConfiguration(boats1, shots, True)
-    main.displayConfiguration(boats2, shots, False)
+    main.displayConfiguration(boats2, shots2, False)
 
 def fire():
     x_char = input ("quelle colonne ? ")
@@ -98,17 +102,3 @@ def fire():
     x = ord(x_char)-ord("A")+1
     y = int(input ("quelle ligne ? "))
     return x,y
-
-    ''' la logique grosso merdo
-        affichage()
-        data = lesocket.recv(2048).decode("UTF_8")
-            if data = "PLAY" :
-                #jouer un tir
-            elif data = #format de coup joué :
-                #ajouter à la liste des coups joués
-            elif #code victoire ou defaite :
-                changer le tableau du compte de match
-            elif #information spéciale :
-                 #à  voir
-            else :
-                #erreur ou warning'''

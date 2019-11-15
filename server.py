@@ -71,6 +71,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                     print("connection to player 1 established !")
                     if isgameinit < 2 : #only two when the two players have recieved the boat position data.
                         player1.send(pickle.dumps(boats1))
+                        time.sleep(1)
                         player1.send(pickle.dumps(boats2))
                         isgameinit +=1
                 elif player2 == '' :
@@ -79,6 +80,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                     print("connection to player 2 established !")
                     if isgameinit < 2 : #only two when the two players have recieved the boat position data.
                         player2.send(pickle.dumps(boats2))
+                        time.sleep(1)
                         player2.send(pickle.dumps(boats1))
                         isgameinit +=1
                 else :
@@ -91,7 +93,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                 print("one more user connected, total : ",usrcount,"\n")
                 # print(clientlist) debug purposes
 
-        if isgameinit == 2 :
+        if isgameinit == 2 and main.gameOver(game) == -1 :
             res= ''
             report=''
             player1.send(("PLAY").encode("UTF_8"))
@@ -106,6 +108,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
             report =(x,y,res)
             #print(report)
             player2.send(str(report).encode())
+            time.sleep(1)
             player2.send(("PLAY").encode("UTF_8"))
             text = (player2.recv(4096).decode("UTF_8"))
             #print(text) #debug
@@ -113,7 +116,9 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
             y = int(text[4])
             res = main.addShot(game, x, y, 1)
             player2.send(str(res).encode("UTF_8"))
-            ##################### still needs to send shoot data to players.
+            report =(x,y,res)
+            #print(report)
+            player1.send(str(report).encode())
 
             ''' text=i.recv(4096).decode("UTF_8")
                 if len(text) == 0 :
