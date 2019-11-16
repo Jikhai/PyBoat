@@ -15,6 +15,7 @@ import pickle
 clientlist = []
 P1wins = 0
 P2wins = 0
+isgameinit = 0
 #----                       ----#
 
 
@@ -62,10 +63,12 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
     
     #variables that dictate the game's status
     usrcount = 0
-    isgameinit = 0
+
+    global isgameinit
     state = 0
 
 #-------------------                        --------------------#
+    global P1wins, P2wins
     while True : #tests avec nc localhost 7777 > will do a local client later on
 
         socklist,list_a,list_b = select.select(clientlist + [lesocket],[],[],1)
@@ -83,7 +86,6 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                         time.sleep(1)
                         player1.send(pickle.dumps(boats2))
                         isgameinit +=1
-                        sending(player1,"Waiting for opponent...")
                 elif player2 == '' :
                     player2 = established
                     player2.send(greeting + p2)
@@ -111,66 +113,62 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
             text = recieve(player1,4096)
             if text == '':
                 player1.close()
+                clientlist.remove(player1)
                 player1=''
                 print(" connection to player 1 lost")
                 usrcount -=1
+                print("one user left : ", usrcount," left\n")
                 sending(player2,"VICTORY")
-                #fonction de reset
-            #print(text) #debug
-            x =  int(text[1])
-            y =  int(text[4])
-            res = main.addShot(game, x, y, 0) #returns True or False
-            #print(res)
-            sending(player1,str(res))
-            report =(x,y,res)
-            #print(report)
-            sending(player2,str(report))
-            time.sleep(1)
-            sending(player2,"PLAY")
-            text = (player2.recv(4096).decode("UTF_8"))
-            if text == '':
-                player2.close()
-                player2=''
-                print(" connection to player 2 lost")
-                usrcount -=1
-                sending(player1,"VICTORY")
-                #fonction de reset
-            #print(text) #debug
-            x = int(text[1])
-            y = int(text[4])
-            res = main.addShot(game, x, y, 1)
-            sending(player2,str(res))
-            report =(x,y,res)
-            #print(report)
-            sending(player1,str(report))
-            time.sleep(1)
+                isgameinit = 0
+                P2wins+=1
+                game,boats1,boats2 = reset(player1,player2)
+            else:    
+                #print(text) #debug
+                x =  int(text[1])
+                y =  int(text[4])
+                res = main.addShot(game, x, y, 0) #returns True or False
+                #print(res)
+                sending(player1,str(res))
+                report =(x,y,res)
+                #print(report)
+                sending(player2,str(report))
+                time.sleep(1)
+                sending(player2,"PLAY")
+                text = (player2.recv(4096).decode("UTF_8"))
+                if text == '':
+                    player2.close()
+                    clientlist.remove(player2)
+                    player2=''
+                    print(" connection to player 2 lost")
+                    usrcount -=1 
+                    print("one user left : ", usrcount," left\n")
+                    isgameinit = 0
+                    sending(player1,"VICTORY")
+                    P1wins +=1
+                    game,boats1,boats2 = reset(player1,player2)
+                else :
+                    #print(text) #debug
+                    x = int(text[1])
+                    y = int(text[4])
+                    res = main.addShot(game, x, y, 1)
+                    sending(player2,str(res))
+                    report =(x,y,res)
+                    #print(report)
+                    sending(player1,str(report))
+                    time.sleep(1)
         else:
             if main.gameOver(game) == 0:
                 sending(player1,"VICTORY")
                 P1wins +=1
+                isgameinit = 0
                 sending(player2,"DEFEAT")
-                #fonction de reset
+                reset(player1,player2)
             elif main.gameOver(game) == 1:
                 sending(player1,"DEFEAT")
                 sending(player2,"VICTORY")
                 P2wins +=1
-                #fonction de reset
-
-            ''' text=i.recv(4096).decode("UTF_8")
-                if len(text) == 0 :
-                    if i == player1 :
-                    elif i == player2 :
-                        player2 =''
-                        print("connection to player 2 lost")
-                    i.close()
-                    clientlist.remove(i)
-                    usrcount -=1
-                    print("one user left : ", usrcount," left\n")
-                else :
-                    #that's where the magic will happen
-                    #print ("data transmitted from :", i,"\n")
-                    #print(text)
-                    if i == player1 :'''
+                isgameinit = 0
+                game,boats1,boats2 = reset(player1,player2)
 
     else :
         lesocket.close()
@@ -193,6 +191,38 @@ def sending(player,data):
         print ("Failure ! -->", err)
         return -1
     return 0
-def reset():
-  #TODO
-  a=0
+def reset(player1,player2): #need to assert if we still have two players
+    
+    #new game
+    boats1 = main.randomConfiguration()
+    boats2 = main.randomConfiguration()
+    game = main.Game(boats1, boats2)
+    global P1wins, P2wins, isgameinit
+    print("P1 : ",P1wins," P2 : ",P2wins)
+    
+    
+    if player1 =='':
+        P1wins=0
+        print("the game needs a new player 1")
+        player2.send(pickle.dumps(boats2))
+        time.sleep(1)
+        player2.send(pickle.dumps(boats1))
+        isgameinit =1
+    elif player2 =='':
+        P2wins=0
+        print("the game needs a new player 2")
+        player1.send(pickle.dumps(boats2))
+        time.sleep(1)
+        player1.send(pickle.dumps(boats1))
+        isgameinit =1
+    else :
+        print("Both players are still playing")
+        player2.send(pickle.dumps(boats2))
+        time.sleep(1)
+        player2.send(pickle.dumps(boats1))
+        player1.send(pickle.dumps(boats2))
+        time.sleep(1)
+        player1.send(pickle.dumps(boats1))
+        isgameinit =2
+    print("readying new game")  
+    return game, boats1,boats2

@@ -15,9 +15,9 @@ def ClieGestion(): #all of the logic for the client side
     text = '' #text sent by the server to display on screen
     shots = [] #list of shots used to display shots that have been fired
     shots2 =[]
-    state = ''
     strikes = 0
     strikes2 = 0
+    wins = 0
     #----                ----#
 
     try :
@@ -32,10 +32,10 @@ def ClieGestion(): #all of the logic for the client side
         print("Failure --> ",err)
         sys.exit(-1)
 
-    while state == '' :
+    while True :
         if boats != '' and hostiles != '' : # if boat data has been set up
             Display(boats,hostiles,shots,shots2)
-            print( "you hit ",strikes," times")
+            print( "you hit ",strikes," time(s)")
             print("your opponent hit ", strikes2," times")
             print("\n----------------------\n") 
         try :
@@ -72,12 +72,10 @@ def ClieGestion(): #all of the logic for the client side
                         shots2.append((x, y, False))
                     print("DONE!")
             elif text == "VICTORY" :
-                state = "won"
-                won()
+                boats,hostiles,shots,shots2,strikes,strikes2,wins = won(wins)
 
             elif text == "DEFEAT" :
-                state = "lost"
-                loose()
+                boats,hostiles,shots,shots2,strikes,strikes2 =  lost(wins)
 
             elif text.startswith("(") : #that's a shot dataset
                 print("your opponent played :")
@@ -87,6 +85,7 @@ def ClieGestion(): #all of the logic for the client side
                 #print(x, y, result) #debug
                 if result == "True" :
                     shots.append((x, y, True))
+                    print("!You got Hit!")
                     strikes2 +=1
                 elif result == "False" :
                     shots.append((x, y, False))
@@ -115,8 +114,15 @@ def fire():
         y = int(input ("Pick a lign (use a number): "))
     return x,y
 
-def won ():
+def won(wins):
     print("you won ! ending the game now.\n")
+    wins +=1 
+    print("you've won ",wins," time(s) so far !")
+    print("readying new game !\n")
+    return '','',[],[],0,0,wins #boatlists, shots, hitcounts, wincount
 
-def lost():
+def lost(wins):
     print("you lost ! ending the game now.\n")
+    print("you've won ",wins," time(s) so far !")
+    print("readying new game !\n")
+    return '','',[],[],0,0 #boatlists, shots, hitcounts
