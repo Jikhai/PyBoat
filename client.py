@@ -7,7 +7,7 @@ import os
 import sys
 import string
 import socket
-def ClieGestion(): #all of the logic for the client side
+def ClieGestion(address,port): #all of the logic for the client side
 
     #---- GAME VARIABLES ----#
     boats = '' #position of boats sent at the start of the game
@@ -25,9 +25,11 @@ def ClieGestion(): #all of the logic for the client side
     except Exception as err:
         print("Failure ! -->",err)
         sys.exit(-1)
-
+    if address == "127.0.0.1":
+        address ="::1"
     try :
-        lesocket.connect(("localhost",7777))
+
+        lesocket.connect((address,port))
     except Exception as err :
         print("Failure --> ",err)
         sys.exit(-1)

@@ -88,45 +88,24 @@ def main():
             # you dun goofed
         else :
             if sys.argv[1] == "-h" or sys.argv[1] == "--help" :
-                print ("usage : ...\n") #to be completed
+                helpmsg() 
                 # nothing more to do here.
             else : 
+                arg = (sys.argv[1]).split(":") #argument control
+                try :
+                    address = arg[0]
+                    port = int(arg[1])
+                except Exception as err:
+                    helpmsg()
+                    sys.exit(-1)
+                
                 print ("now running as Player ...\n\n")
                 #Run player-side code here
-                ClieGestion()
+                ClieGestion(address,port)
 
-#kept for reference purposes, will be deleted on release
-'''def main():
-    boats1 = randomConfiguration()
-    boats2 = randomConfiguration()
-    game = Game(boats1, boats2)
-    displayGame(game, 0)
+def helpmsg():
+    print ("usage :\nmain.py <no argument> : run in server mode (note only one at a time)\nmain.py <ipadress:port> : run in client mode (only two at a time)\n-h or --help for this message\n")
 
-    currentPlayer = 0
-    while gameOver(game) == -1:
-        if currentPlayer == J0:
-            x_char = input ("quelle colonne ? ")
-            x_char.capitalize()
-            x = ord(x_char)-ord("A")+1
-            y = int(input ("quelle ligne ? "))
-        else:
-            (x,y) = randomNewShot(game.shots[currentPlayer])
-            print("l'ordinateur joue ", chr(x+ord("A")-1), y)
-            time.sleep(1)
-        addShot(game, x, y, currentPlayer)
-        print("======================")
-        displayGame(game, 0)
-        currentPlayer = (currentPlayer+1)%2
-    print("game over")
-    print("your grid :")
-    displayGame(game, J0)
-    print("the other grid :")
-    displayGame(game, J1)
 
-    if gameOver(game) == J0:
-        print("You win !")
-    else:
-        print("you loose !")
-'''
 if __name__ == "__main__" :
     main()
