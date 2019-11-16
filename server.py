@@ -205,18 +205,18 @@ def reset(player1,player2): #need to assert if we still have two players
     elif player2 =='':
         P2wins=0
         print("the game needs a new player 2")
-        player1.send(pickle.dumps(boats2))
-        time.sleep(1)
         player1.send(pickle.dumps(boats1))
+        time.sleep(1)
+        player1.send(pickle.dumps(boats2))
         isgameinit =1
     else :
         print("Both players are still playing")
         player2.send(pickle.dumps(boats2))
         time.sleep(1)
         player2.send(pickle.dumps(boats1))
-        player1.send(pickle.dumps(boats2))
-        time.sleep(1)
         player1.send(pickle.dumps(boats1))
+        time.sleep(1)
+        player1.send(pickle.dumps(boats2))
         isgameinit =2
     print("readying new game")  
     return game, boats1,boats2
