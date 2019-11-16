@@ -155,7 +155,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                 P1wins +=1
                 isgameinit = 0
                 sending(player2,"DEFEAT")
-                reset(player1,player2)
+                game,boats1,boats2 = reset(player1,player2)
             elif main.gameOver(game) == 1:
                 sending(player1,"DEFEAT")
                 sending(player2,"VICTORY")
@@ -190,6 +190,7 @@ def reset(player1,player2): #need to assert if we still have two players
     boats1 = main.randomConfiguration()
     boats2 = main.randomConfiguration()
     game = main.Game(boats1, boats2)
+    game.shots =[[],[]] #because it doesn't empty itself otherwise
     global P1wins, P2wins, isgameinit
     print("P1 : ",P1wins," P2 : ",P2wins)
     
