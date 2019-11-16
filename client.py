@@ -108,11 +108,11 @@ def fire():
     x_char = ''
     y = 0
     while x_char > 'J' or x_char < 'A' or len(x_char) > 1 :
-        x_char = input ("Pick a column (use a letter) ")
+        x_char = input ("Pick a column (use a letter): ")
         x_char = x_char.capitalize()
     x = ord(x_char)-ord("A")+1
     while y < 1 or y > 10 :
-        y = int(input ("Pick a lign (use a number)"))
+        y = int(input ("Pick a lign (use a number): "))
     return x,y
 
 def won ():
