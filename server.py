@@ -13,7 +13,6 @@ import pickle
 
 #Client socket list
 clientlist = []
-
 #----                       ----#
 
 
@@ -41,7 +40,9 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
 
     lesocket.listen(1)
     usrcount = 0
-
+#-------------------- Local variables space --------------------#
+    P1wins = 0
+    P2wins = 0
     # just a list of preset notifications to send to the clients
     notifforfeit = ("Your opponent left, or was disconnected, you win by default.\n").encode("utf_8")
     #greetingnick =("please pick a username using the command : NICK <username> you can get a list of commands with HELP\n").encode("utf_8")
@@ -58,6 +59,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
     player1 = ''
     player2 = ''
     isgameinit = 0
+#-------------------                        --------------------#
     while True : #tests avec nc localhost 7777 > will do a local client later on
 
         socklist,list_a,list_b = select.select(clientlist + [lesocket],[],[],1)
@@ -125,10 +127,11 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
             if main.gameOver(game) == 0:
                 player1.send(("VICTORY").encode("UTF_8"))
                 player2.send(("DEFEAT").encode("UTF_8"))
+                #fonction de reset
             elif main.gameOver(game) == 1:
                 player2.send(("VICTORY").encode("UTF_8"))
                 player1.send(("DEFEAT").encode("UTF_8"))
-
+                #fonction de reset
 
             ''' text=i.recv(4096).decode("UTF_8")
                 if len(text) == 0 :

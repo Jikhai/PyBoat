@@ -15,7 +15,9 @@ def ClieGestion(): #all of the logic for the client side
     text = '' #text sent by the server to display on screen
     shots = [] #list of shots used to display shots that have been fired
     shots2 =[]
-    win = ''
+    state = ''
+    strikes = 0
+    strikes2 = 0
     #----                ----#
 
     try :
@@ -30,10 +32,12 @@ def ClieGestion(): #all of the logic for the client side
         print("Failure --> ",err)
         sys.exit(-1)
 
-    while win == '' :
+    while state == '' :
         if boats != '' and hostiles != '' : # if boat data has been set up
             Display(boats,hostiles,shots,shots2)
-            print("\n----------------------\n")
+            print( "you hit ",strikes," times")
+            print("your opponent hit ", strikes2," times")
+            print("\n----------------------\n") 
         try :
             data = lesocket.recv(4096)
         except Exception as err:
@@ -61,18 +65,18 @@ def ClieGestion(): #all of the logic for the client side
                     coord = str(coord)
                     lesocket.send(coord.encode())
                     result = (lesocket.recv(1024)).decode("UTF_8")
-                    if result == "True" :
-                        shots2.append((x, y, True))# --> shots to the other player
-
+                    if result == "True" : # whever it hit or not
+                        shots2.append((x, y, True))
+                        strikes +=1
                     elif result == "False" :
-                        shots2.append((x, y, False))# --> shots to the other player
+                        shots2.append((x, y, False))
                     print("DONE!")
             elif text == "VICTORY" :
-                win = "win"
+                state = "won"
                 won()
 
             elif text == "DEFEAT" :
-                win = "loose"
+                state = "lost"
                 loose()
 
             elif text.startswith("(") : #that's a shot dataset
@@ -82,9 +86,10 @@ def ClieGestion(): #all of the logic for the client side
                 result = text[7:-1]
                 #print(x, y, result) #debug
                 if result == "True" :
-                    shots.append((x, y, True))# --> shots to the other player
+                    shots.append((x, y, True))
+                    strikes2 +=1
                 elif result == "False" :
-                    shots.append((x, y, False))# --> shots to the other player
+                    shots.append((x, y, False))
             elif text !='' :
                 print(text)
                 text=''
@@ -103,15 +108,15 @@ def fire():
     x_char = ''
     y = 0
     while x_char > 'J' or x_char < 'A' or len(x_char) > 1 :
-        x_char = input ("quelle colonne ? ")
+        x_char = input ("Pick a column (use a letter) ")
         x_char = x_char.capitalize()
     x = ord(x_char)-ord("A")+1
     while y < 1 or y > 10 :
-        y = int(input ("quelle ligne ? "))
+        y = int(input ("Pick a lign (use a number)"))
     return x,y
 
 def won ():
-    print("you win ! ending the game now.\n")
+    print("you won ! ending the game now.\n")
 
-def loose():
-    print("you loose ! ending the game now.\n")
+def lost():
+    print("you lost ! ending the game now.\n")
