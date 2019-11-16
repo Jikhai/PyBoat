@@ -69,7 +69,7 @@ def ClieGestion(address,port): #all of the logic for the client side
                         strikes +=1
                     elif result == "False" :
                         shots2.append((x, y, False))
-                    print("DONE!")
+                        print("\n!You Missed!\n")
             elif text == "VICTORY" :
                 boats,hostiles,shots,shots2,strikes,strikes2,wins = won(wins)
 
@@ -83,7 +83,7 @@ def ClieGestion(address,port): #all of the logic for the client side
                 result = text[7:-1]
                 if result == "True" :
                     shots.append((x, y, True))
-                    print("!You got Hit!")
+                    print("\n!You got Hit!\n")
                     strikes2 +=1
                 elif result == "False" :
                     shots.append((x, y, False))
@@ -109,7 +109,12 @@ def fire():
         x_char = x_char.capitalize()
     x = ord(x_char)-ord("A")+1
     while y < 1 or y > 10 :
-        y = int(input ("Pick a lign (use a number): "))
+        tmp = input ("Pick a lign (use a number): ")
+        try :
+            y = int(tmp)
+        except Exception as err :
+            print("you idiot. I asked for a number. Try again.")
+            continue
     return x,y
 
 def won(wins):
