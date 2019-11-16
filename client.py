@@ -78,15 +78,18 @@ def ClieGestion(address,port): #all of the logic for the client side
 
             elif text.startswith("(") : #that's a shot dataset
                 print("your opponent played :")
-                x = int(text[1])
-                y = int(text[4])
-                result = text[7:-1]
-                if result == "True" :
+                x,y,result = text.split(",")
+                x = int(x[1:])
+                y = int(y)
+                result = result[1:-1]
+                print(result)
+                if result == "True": 
                     shots.append((x, y, True))
                     print("\n!You got Hit!\n")
                     strikes2 +=1
-                elif result == "False" :
+                elif result == "False":
                     shots.append((x, y, False))
+
             elif text !='' :
                 print(text)
                 text=''

@@ -103,7 +103,6 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                 print("one more user connected, total : ",usrcount,"\n")
 
         if isgameinit == 2 and main.gameOver(game) == -1 :
-            print("start of a turn !")
             res= ''
             report=''
             sending(player1,"PLAY")
@@ -120,13 +119,12 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                 P2wins+=1
                 game,boats1,boats2 = reset(player1,player2)
             else:    
-                x =  int(text[1])
-                y =  int(text[4])
+                x,y = text.split(",")
+                x = int(x[1:])
+                y = int(y[0:-1])
                 res = main.addShot(game, x, y, 0) #returns True or False
-                #print(res)
                 sending(player1,str(res))
                 report =(x,y,res)
-                #print(report)
                 sending(player2,str(report))
                 time.sleep(1)
                 sending(player2,"PLAY")
@@ -143,12 +141,12 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                     P1wins +=1
                     game,boats1,boats2 = reset(player1,player2)
                 else :
-                    x = int(text[1])
-                    y = int(text[4])
+                    x,y = text.split(",")
+                    x = int(x[1:])
+                    y = int(y[0:-1])
                     res = main.addShot(game, x, y, 1)
                     sending(player2,str(res))
                     report =(x,y,res)
-                    #print(report)
                     sending(player1,str(report))
                     time.sleep(1)
         else:
