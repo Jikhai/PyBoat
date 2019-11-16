@@ -45,8 +45,7 @@ def gameOver(game):
         nbStrikes = 0
         for (x,y,strike) in game.shots[player]:
             if strike:
-                nbStrikes += 1
-        #print("joueur", player, ":", nbStrikes, "touches")
+                nbStrikes += 1 
         if nbStrikes == 17: 
             return player
     return -1;

@@ -21,7 +21,7 @@ isgameinit = 0
 
 def SockGestion(): # controls the opening and closing of sockets and game logic
     try :
-        lesocket = socket.socket(socket.AF_INET6,socket.SOCK_STREAM, 0)
+        lesocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM, 0)
     except Exception as err:
         print("Failure ! -->", err)
         sys.exit(-1)
@@ -47,7 +47,6 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
 #-------------------- Local variables space --------------------#
     # just a list of preset notifications to send to the clients
     notifforfeit = ("Your opponent left, or was disconnected, you win by default.\n").encode("utf_8")
-    #greetingnick =("please pick a username using the command : NICK <username> you can get a list of commands with HELP\n").encode("utf_8")
     greeting =("Welcome to BattleShip !\n").encode("utf_8")
     p2 =("you are player 2\n").encode("UTF_8")
     p1 =("you are player 1\n").encode("UTF_8")
@@ -69,15 +68,14 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
 
 #-------------------                        --------------------#
     global P1wins, P2wins
-    while True : #tests avec nc localhost 7777 > will do a local client later on
-
+    while True : 
         socklist,list_a,list_b = select.select(clientlist + [lesocket],[],[],1)
         for i in socklist :
             if i == lesocket :
                 established, addr = lesocket.accept()
                 clientlist.append(established)
-                if player1 == '' : # here we're going to check if the two players
-                    player1 = established # exist, and refuse further connections
+                if player1 == '' : #here we're going to check if the two players
+                    player1 = established #exist, and refuse further connections
                     player1.send(greeting + p1)
                     print("connection to player 1 established !")
                     if isgameinit < 2 : #only two when the two players 
@@ -103,7 +101,6 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                     usrcount-=1 #because it would break the count otherwise
                 usrcount +=1
                 print("one more user connected, total : ",usrcount,"\n")
-                #print(clientlist) #debug purposes
 
         if isgameinit == 2 and main.gameOver(game) == -1 :
             print("start of a turn !")
@@ -123,7 +120,6 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                 P2wins+=1
                 game,boats1,boats2 = reset(player1,player2)
             else:    
-                #print(text) #debug
                 x =  int(text[1])
                 y =  int(text[4])
                 res = main.addShot(game, x, y, 0) #returns True or False
@@ -147,7 +143,6 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
                     P1wins +=1
                     game,boats1,boats2 = reset(player1,player2)
                 else :
-                    #print(text) #debug
                     x = int(text[1])
                     y = int(text[4])
                     res = main.addShot(game, x, y, 1)

@@ -8,11 +8,6 @@ import time
 import os
 import sys
 import string
-import select
-import socket
-#---- Global Variable Space ----#
-# NB : Global variables from other files also get imported
-#----                       ----#
 
 """ generate a random valid configuration """
 def randomConfiguration():
@@ -104,7 +99,7 @@ def main():
                 ClieGestion(address,port)
 
 def helpmsg():
-    print ("usage :\nmain.py <no argument> : run in server mode (note only one at a time)\nmain.py <ipadress:port> : run in client mode (only two at a time)\n-h or --help for this message\n")
+    print ("usage :\nmain.py <no argument> : run in server mode (note only one at a time)\nmain.py <ipadress:port> : run in client mode (only two at a time)\n-h or --help for this message\n\nyou can use localhost, and 127.O.O.1 alike, or any IPv4 address")
 
 
 if __name__ == "__main__" :

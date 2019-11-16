@@ -15,25 +15,23 @@ def ClieGestion(address,port): #all of the logic for the client side
     text = '' #text sent by the server to display on screen
     shots = [] #list of shots used to display shots that have been fired
     shots2 =[]
-    strikes = 0
+    strikes = 0 #how many hits you got on the ennemy
     strikes2 = 0
-    wins = 0
+    wins = 0 #how many games you won
     #----                ----#
 
     try :
-        lesocket = socket.socket(socket.AF_INET6,socket.SOCK_STREAM, 0)
+        lesocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM, 0)
     except Exception as err:
         print("Failure ! -->",err)
         sys.exit(-1)
-    if address == "127.0.0.1":
-        address ="::1"
+    lesocket.settimeout(10)
     try :
-
         lesocket.connect((address,port))
     except Exception as err :
         print("Failure --> ",err)
         sys.exit(-1)
-
+    lesocket.settimeout(None)
     while True :
         if boats != '' and hostiles != '' : # if boat data has been set up
             Display(boats,hostiles,shots,shots2)
@@ -51,8 +49,7 @@ def ClieGestion(address,port): #all of the logic for the client side
         else :
             try : # if it can't be decoded then it's the data for boat positions
                 text  = data.decode("UTF_8") #play
-            except Exception as err :
-                #print("not a regular message :p") #debug
+            except Exception as err : 
                 text = ''
                 if boats== '':
                     boats = pickle.loads(data) # rebuilding the boat data from bytes
@@ -84,7 +81,6 @@ def ClieGestion(address,port): #all of the logic for the client side
                 x = int(text[1])
                 y = int(text[4])
                 result = text[7:-1]
-                #print(x, y, result) #debug
                 if result == "True" :
                     shots.append((x, y, True))
                     print("!You got Hit!")
