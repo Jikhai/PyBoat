@@ -40,7 +40,7 @@ def SockGestion(): # controls the opening and closing of sockets and game logic
     except Exception as err:
         print("Failure ! -->", err)
         sys.exit(-1)
-    print("gethostbyname gave() : ",ipaddr,", the port the game runs on is : ",port)
+    print("gethostbyname() gave : ",ipaddr,", the port the game runs on is : ",port)
 
     lesocket.listen(1)
    
